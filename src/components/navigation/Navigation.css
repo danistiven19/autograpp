@@ -1,0 +1,23 @@
+/* Styles for navbar on computer screens */
+
+
+.App-logo {
+  height: 5vw;
+  width: auto;
+  pointer-events: none;
+}
+
+.App-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2vw; /* Change font-size depending on screen size */
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide text if it gets truncated */
+  text-overflow: ellipsis; /* Show ellipsis (...) if text is truncated */
+}
+@media screen and (max-width: 500px) {
+  .App-name {
+    display: none; /* Hide the entire class if text doesn't fit */
+  }
+}
