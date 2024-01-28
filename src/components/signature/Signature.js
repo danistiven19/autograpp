@@ -6,6 +6,20 @@ const SignatureField = (props) => {
   const isDrawing = useRef(false);
 
   const contextType = '2d';
+  let blankCanvas = null;
+  
+  function createBlankCanvas() {
+    if (blankCanvas) {
+      return blankCanvas;
+    }
+  
+    const { current: canvas } = canvasRef;
+
+    blankCanvas = document.createElement('canvas');
+    blankCanvas.width = canvas.width;
+    blankCanvas.height = canvas.height;
+    return blankCanvas;
+  }
 
   const getCanvasContextAndPosition = useCallback((event) => {
     if (!event) {
@@ -60,25 +74,28 @@ const SignatureField = (props) => {
 
   }, [getCanvasContextAndPosition, isDrawing]);
 
-  const endDrawing = useCallback(() => {
-    isDrawing.current = false;
-  }, []);
-
-  const saveSignature = () => {
-    const canvas = canvasRef.current;
+  const printSignature = () => {
+    const { current: canvas } = canvasRef;
     const signatureDataURL = canvas.toDataURL();
+    const blankCanvasDataURL = createBlankCanvas().toDataURL();
+
+    if (!signatureDataURL || signatureDataURL === blankCanvasDataURL) {
+      return;
+    }
+  
     props.storeSignature(signatureDataURL);
   };
 
   const clearSignature = () => {
-    const canvas = canvasRef.current;
+    const { current: canvas } = canvasRef;
     const context = canvas.getContext(contextType);
     context.clearRect(0, 0, canvas.width, canvas.height);
     props.storeSignature('');
   };
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const { current: canvas } = canvasRef;
+    const endDrawing = () => isDrawing.current = false;
     if (canvas) {
       canvas.addEventListener('mousedown', startDrawing);
       canvas.addEventListener('mousemove', draw);
@@ -94,19 +111,13 @@ const SignatureField = (props) => {
         canvas.removeEventListener('mouseout', endDrawing);
       }
     };
-  }, [startDrawing, draw, endDrawing]);
+  }, [startDrawing, draw]);
 
   return (
     <div>
-      <canvas
-        ref={canvasRef}
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
-        onMouseUp={endDrawing}
-        onMouseOut={endDrawing}
-      />
-      <Button onClick={saveSignature}>Save</Button>
-      <Button onClick={clearSignature}>Clear</Button>
+      <canvas ref={canvasRef} />
+      <Button id="printSignature" onClick={printSignature}>Print</Button>
+      <Button id="clearSignature" onClick={clearSignature}>Clear</Button>
     </div>
   );
 };

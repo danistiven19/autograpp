@@ -18,8 +18,6 @@ function App() {
         <Routes>
           <Route path="/" element={<MyCollection />} />
           <Route path="/famous" element={<FamousForm />} />
-
-          {/* Add more routes here if necessary */}
         </Routes>
         </div>
       </div>
