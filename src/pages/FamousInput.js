@@ -1,11 +1,22 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TextField, Button, Alert } from '@mui/material';
 import SignatureField from './../components/signature/Signature';
 
-function FamousForm() {
+function FamousForm(props) {
   const [famousName, setFamousName] = useState('');
   const [signature, setSignature] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    const { famousNameProp, signatureProp } = props;
+    if (famousNameProp) {
+      setFamousName(famousNameProp);
+    }
+    
+    if (signatureProp) { 
+      setSignature(signatureProp);
+    }
+  }, [props]);
 
   const handleNameChange = (event) => {
     if (!event || !event.target || !event.target.value) {

@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useEffect } from 'react';
 import { Button } from '@mui/material';
 
-const SignatureField = (props) => {
+function SignatureField(props) {
   const canvasRef = useRef(null);
   const isDrawing = useRef(false);
 
