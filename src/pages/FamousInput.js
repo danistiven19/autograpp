@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { TextField, Button, Alert } from '@mui/material';
 import SignatureField from './../components/signature/Signature';
+import { createFamous } from '../api/famous';
 
 function FamousForm(props) {
   const [famousName, setFamousName] = useState('');
@@ -38,6 +39,14 @@ function FamousForm(props) {
     setSignature(signatureProp);
   }, [setSignature]);
 
+  const storeInformation = async (famous) => {
+    try {
+      await createFamous(famous);
+    } catch(err) {
+      console.error('Failed famous creation: ', err.errorMessage);
+    }
+  };
+
   const handleSave = () => {
     if (!famousName || !signature) {
       setErrorMessage('Please fill in all fields.');
@@ -46,6 +55,7 @@ function FamousForm(props) {
 
     console.log(`Nombre del famoso: ${famousName}`);
     console.log(`Información: ${signature}`);
+    storeInformation({name: famousName, signature })
     setErrorMessage('');
   };
 
