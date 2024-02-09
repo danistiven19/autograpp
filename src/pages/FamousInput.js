@@ -1,11 +1,23 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TextField, Button, Alert } from '@mui/material';
 import SignatureField from './../components/signature/Signature';
+import { createFamous } from '../api/famous';
 
-function FamousForm() {
+function FamousForm(props) {
   const [famousName, setFamousName] = useState('');
   const [signature, setSignature] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    const { famousNameProp, signatureProp } = props;
+    if (famousNameProp) {
+      setFamousName(famousNameProp);
+    }
+    
+    if (signatureProp) { 
+      setSignature(signatureProp);
+    }
+  }, [props]);
 
   const handleNameChange = (event) => {
     if (!event || !event.target || !event.target.value) {
@@ -27,6 +39,14 @@ function FamousForm() {
     setSignature(signatureProp);
   }, [setSignature]);
 
+  const storeInformation = async (famous) => {
+    try {
+      await createFamous(famous);
+    } catch(err) {
+      console.error('Failed famous creation: ', err.errorMessage);
+    }
+  };
+
   const handleSave = () => {
     if (!famousName || !signature) {
       setErrorMessage('Please fill in all fields.');
@@ -35,6 +55,7 @@ function FamousForm() {
 
     console.log(`Nombre del famoso: ${famousName}`);
     console.log(`Información: ${signature}`);
+    storeInformation({name: famousName, signature })
     setErrorMessage('');
   };
 
