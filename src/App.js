@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import MyCollection from './pages/myCollection/myCollection';
-import FamousForm from './pages/FamousInput';
+import FamousForm from './pages/famous/FamousInput';
 import Navigation from './components/navigation/Navigation';
 
 function App() {

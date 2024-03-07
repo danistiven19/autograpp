@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:5100/api/v1';
+const baseURL = 'http://localhost:4000/api/v1';
 
 export const getAllFamous = async () => {
   const response = await fetch(`${baseURL}/famous`);
